@@ -53,7 +53,7 @@
 </svg>
 <div class="legend"><span style="color:#888">■</span> 市販パンを買い続けた場合の累計　<span style="color:#2563eb">■</span> ホームベーカリーの累計（本体＋材料費）</div>
 
-<p class="note">前提: 自家製1斤のコスト初期値112円は、強力粉250g 約75円（1kg 300円換算）＋イースト・バター等 約25円＋電気代 約12円（0.4kWh×31円）の試算です。実際の価格に合わせてスライダーで調整してください。手間（作業時間）は金額換算していません。</p>
+<p class="note">前提: 自家製1斤のコストは、強力粉250g・バター10g・砂糖・塩・ドライイースト・電気代の合計です。材料の単価は買う店や銘柄で変わるので、実際の価格に合わせてスライダーで調整してください。手間（作業時間）は金額換算していません。</p>
 </div>
 <script>
 (function(){
@@ -98,7 +98,16 @@
       else { dot.style.display='none'; }
     } else { dot.style.display='none'; }
   }
-  keys.forEach(function(k){ document.getElementById('in-'+k).addEventListener('input', render); });
+  var params=new URLSearchParams(location.search);
+  keys.forEach(function(k){
+    var el=document.getElementById('in-'+k);
+    var v=params.get(k);
+    if(v!==null && !isNaN(parseFloat(v))){
+      var min=parseFloat(el.min), max=parseFloat(el.max);
+      el.value=Math.min(max, Math.max(min, parseFloat(v)));
+    }
+    el.addEventListener('input', render);
+  });
   render();
 })();
 </script>
